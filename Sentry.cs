@@ -39,7 +39,11 @@ public class Sentry : MonoBehaviour {
     int weapon = 0;
     int ammoCount; 
     float health;
-    public GUISkin skin; 
+    public GUISkin skin;
+
+    List<GameObject> movePositions = new List<GameObject>();
+    int movePos = 0;
+    Vector3 currentMovePosition;
     // Use this for initialization
     void Awake()
     {
@@ -50,6 +54,16 @@ public class Sentry : MonoBehaviour {
     }
     void Start ()
     {
+
+        movePositions.Add(GameObject.Find("StartBossPosition"));
+        movePositions.Add(GameObject.Find("BossPosition2"));
+        movePositions.Add(GameObject.Find("BossPosition3"));
+        movePositions.Add(GameObject.Find("BossPosition4"));
+
+        currentMovePosition = new Vector3(movePositions[movePos].transform.position.x, movePositions[movePos].transform.position.y, movePositions[movePos].transform.position.z);
+
+        transform.position = currentMovePosition;
+
         alive = true; 
         health = 1000f; 
         nView = GetComponent<NetworkView>();
@@ -64,8 +78,8 @@ public class Sentry : MonoBehaviour {
         players = GameObject.FindGameObjectsWithTag("Player");
         playerChoice = 0;
         StartCoroutine(PlayerChoice());
-        StartCoroutine(MissleRespawn()); 
-
+        StartCoroutine(MissleRespawn());
+        StartCoroutine(ChangePositions());
     }
 	
 	// Update is called once per frame
@@ -74,17 +88,17 @@ public class Sentry : MonoBehaviour {
         BossHealth(); 
         if (Input.GetKeyDown(KeyCode.Alpha8))
         {
-            weapon = 1; 
+            movePos++;
         }
 
         if (!nView.isMine)
         {
             SyncedMovement(); 
         }
-        transform.position = new Vector3(0, 20, 0);
+
         direction = (players[playerChoice].transform.position - transform.position).normalized;
         lookRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5);
 
         if (fire)
         {
@@ -185,13 +199,8 @@ public class Sentry : MonoBehaviour {
     void OnGUI()
     {
         GUI.skin = skin; 
-        if (alive)
-        {
-            if (health > 0)
-            {
-                GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
-            }
-        }
+        
+        GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
     }
     void BossHealth()
     {
@@ -203,6 +212,8 @@ public class Sentry : MonoBehaviour {
         else
         {
             alive = true;
+            currentMovePosition = new Vector3(movePositions[movePos].transform.position.x, movePositions[movePos].transform.position.y, movePositions[movePos].transform.position.z);
+            transform.position = Vector3.Lerp(transform.position, currentMovePosition, 1 * Time.deltaTime);
         }
     }
     void CheckIfDead()
@@ -249,6 +260,23 @@ public class Sentry : MonoBehaviour {
         
         StartCoroutine(PlayerChoice());
         
+    }
+    IEnumerator ChangePositions()
+    {
+        yield return new WaitForSeconds(20);
+        if (health < 250)
+        {
+            movePos++;
+
+            if (movePos > movePositions.Count)
+            {
+                movePos = 0;
+            }
+        }
+
+
+        StartCoroutine(ChangePositions());
+    
     }
     IEnumerator MissleRespawn()
     {
