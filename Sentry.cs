@@ -263,7 +263,7 @@ public class Sentry : MonoBehaviour {
 
     public void ClientTakeDamageFromWeapon(int dam)
     {
-        health = health - (dam / 2); 
+        health = health - dam; 
     }
     #region Network Junk
     [RPC]
@@ -338,7 +338,7 @@ public class Sentry : MonoBehaviour {
     [RPC]
     void NetworkTakeDamageFromWeapon(int damage)
     {
-        health = health - (damage / 2);
+        health = health - damage;
         CheckIfDead(); 
     }
     #region NetworkSyncing
