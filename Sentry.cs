@@ -201,11 +201,7 @@ public class Sentry : MonoBehaviour {
         StartCoroutine(PlayerChoice());
         //fire = !fire; 
     }
-    [RPC]
-    void NetworkTakeDamageFromWeapon(int dam)
-    {
 
-    }
     [RPC]
     void LaserHit(Vector3 pos)
     {
