@@ -370,6 +370,24 @@ public class LaserBeam : MonoBehaviour
                                         nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 5);
                                     }
                                 }
+
+                                if (hit.collider.tag == "Boss")
+                                {
+                                    nView = hit.collider.GetComponent<NetworkView>();
+                                    nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 5);
+                                    if (nView.isMine)
+                                    {
+                                        Sentry boss;
+                                        boss = nView.GetComponent<Sentry>();
+                                        boss.ClientTakeDamageFromWeapon(10);
+                                    }
+                                    else
+                                    {
+                                        nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 5);
+                                    }
+                                }
+
+
                                 if (laserAmmo == 0)
                                     {
                                         StartCoroutine(LaserAmmoSpawn());
@@ -410,6 +428,23 @@ public class LaserBeam : MonoBehaviour
                                             nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 5);
                                         }
                                     }
+                                    
+
+                                    if (hit.collider.tag == "Boss")
+                                     {
+                                    nView = hit.collider.GetComponent<NetworkView>();
+                                    nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 10);
+                                    if (nView.isMine)
+                                    {
+                                        Sentry boss;
+                                        boss = nView.GetComponent<Sentry>();
+                                        boss.ClientTakeDamageFromWeapon(10);
+                                    }
+                                    else
+                                    {
+                                        nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 10);
+                                    }
+                                }
                                     incendaryAmmo--;
                                     Vector3 explosionPos = new Vector3(hit.point.x, hit.point.y, hit.point.z);
                                     effects.RPC("Explosion", RPCMode.All, explosionPos);

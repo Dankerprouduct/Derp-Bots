@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic; 
 
 public class Sentry : MonoBehaviour {
 
@@ -37,7 +38,8 @@ public class Sentry : MonoBehaviour {
 
     int weapon = 0;
     int ammoCount; 
-    float health; 
+    float health;
+    public GUISkin skin; 
     // Use this for initialization
     void Awake()
     {
@@ -49,7 +51,7 @@ public class Sentry : MonoBehaviour {
     void Start ()
     {
         alive = true; 
-        health = 5000; 
+        health = 1000f; 
         nView = GetComponent<NetworkView>();
         ammoCount = 50; 
         line = GetComponent<LineRenderer>();
@@ -62,6 +64,7 @@ public class Sentry : MonoBehaviour {
         players = GameObject.FindGameObjectsWithTag("Player");
         playerChoice = 0;
         StartCoroutine(PlayerChoice());
+        StartCoroutine(MissleRespawn()); 
 
     }
 	
@@ -148,6 +151,23 @@ public class Sentry : MonoBehaviour {
 
                 }
 
+                #region lower level health
+                /*
+                if (health < 500)
+                {
+                    List<GameObject> currentPlayers = new List<GameObject>();   
+                    foreach (GameObject gO in players)
+                    {
+                        currentPlayers.Add(gO); 
+                    }
+
+                    for (int i = 0; i < currentPlayers.Count; i++)
+                    {
+
+                    }
+                }
+                 * */
+                #endregion
 
             }
             else
@@ -164,11 +184,12 @@ public class Sentry : MonoBehaviour {
 
     void OnGUI()
     {
+        GUI.skin = skin; 
         if (alive)
         {
             if (health > 0)
             {
-                GUI.Box(new Rect(0, Screen.width / 2, (health / 2), 50), "Mad Crystal");
+                GUI.Box(new Rect((Screen.width / 2) - (health / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("HighlightIcon"));
             }
         }
     }
@@ -202,9 +223,14 @@ public class Sentry : MonoBehaviour {
         playerChoice = Random.Range(0, players.Length);
         
 
-        if (health >= 2500)
+        if (health >= 500)
         {
-            weapon = 0;
+
+            weapon++;
+            if (weapon > 1)
+            {
+                weapon = 0; 
+            }
         }
         else
         {
@@ -219,12 +245,27 @@ public class Sentry : MonoBehaviour {
                 weapon = 0; 
             }
         }
-        ammoCount = 50; 
+        
         
         StartCoroutine(PlayerChoice());
-        //fire = !fire; 
+        
+    }
+    IEnumerator MissleRespawn()
+    {
+        yield return new WaitForSeconds(.5f);
+        ammoCount++;
+        if (ammoCount > 1)
+        {
+            ammoCount = 1; 
+        }
+        StartCoroutine(MissleRespawn()); 
     }
 
+    public void ClientTakeDamageFromWeapon(int dam)
+    {
+        health = health - dam; 
+    }
+    #region Network Junk
     [RPC]
     void LaserHit(Vector3 pos)
     {
@@ -344,5 +385,7 @@ public class Sentry : MonoBehaviour {
         transform.rotation = Quaternion.Lerp(qSrot, qErot, syncTime / syncDelay);
 
     }
+    #endregion
+
     #endregion
 }
