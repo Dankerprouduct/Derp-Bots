@@ -27,5 +27,22 @@ public class Fire : MonoBehaviour {
             nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 1); 
 
         }
+        if (coll.tag == "Boss")
+        {
+            // GameObject hitPlayer = coll.gameObject;
+
+            
+
+            if (nView.isMine)
+            {
+                Sentry companion;
+                companion = nView.GetComponent<Sentry>();
+                companion.ClientTakeDamageFromWeapon(1);
+            }
+            else
+            {
+                nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 1);
+            }
+        }
     }
 }

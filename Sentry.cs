@@ -189,7 +189,7 @@ public class Sentry : MonoBehaviour {
         {
             if (health > 0)
             {
-                GUI.Box(new Rect((Screen.width / 2) - (health / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("HighlightIcon"));
+                GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
             }
         }
     }
