@@ -160,8 +160,10 @@ public class Sentry : MonoBehaviour {
 
     void OnGUI()
     {
-
-        GUI.Box(new Rect(0, Screen.width / 2, (health / 2), 50), "Mad Crystal");
+        if (health > 0)
+        {
+            GUI.Box(new Rect(0, Screen.width / 2, (health / 2), 50), "Mad Crystal");
+        }
     }
     void BossHealth()
     {
