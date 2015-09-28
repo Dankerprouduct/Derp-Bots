@@ -18,7 +18,9 @@ public class Sentry : MonoBehaviour {
     Vector3 direction;
     Transform firePoint;
     NetworkView nView;
-    NetworkView pView; 
+    NetworkView pView;
+    public GameObject death;
+    bool alive; 
     #region
 
     private float lastSynchronizationTime = 0f;
@@ -46,6 +48,7 @@ public class Sentry : MonoBehaviour {
     }
     void Start ()
     {
+        alive = true; 
         health = 5000; 
         nView = GetComponent<NetworkView>();
         ammoCount = 50; 
@@ -65,6 +68,7 @@ public class Sentry : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        BossHealth(); 
         if (Input.GetKeyDown(KeyCode.Alpha8))
         {
             weapon = 1; 
@@ -160,16 +164,35 @@ public class Sentry : MonoBehaviour {
 
     void OnGUI()
     {
-        if (health > 0)
+        if (alive)
         {
-            GUI.Box(new Rect(0, Screen.width / 2, (health / 2), 50), "Mad Crystal");
+            if (health > 0)
+            {
+                GUI.Box(new Rect(0, Screen.width / 2, (health / 2), 50), "Mad Crystal");
+            }
         }
     }
     void BossHealth()
     {
         if (health <= 0)
         {
+            alive = false; 
             // Do an awesome explosion
+        }
+        else
+        {
+            alive = true;
+        }
+    }
+    void CheckIfDead()
+    {
+        if (alive)
+        {
+
+        }
+        else
+        {
+            Network.Instantiate(death, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0); 
         }
     }
     IEnumerator PlayerChoice()
@@ -274,7 +297,8 @@ public class Sentry : MonoBehaviour {
     [RPC]
     void NetworkTakeDamageFromWeapon(int damage)
     {
-        health = health - damage; 
+        health = health - damage;
+        CheckIfDead(); 
     }
     #region NetworkSyncing
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
