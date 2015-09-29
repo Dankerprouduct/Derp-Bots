@@ -371,6 +371,9 @@ public class LaserBeam : MonoBehaviour
                                     }
                                 }
 
+                                    //// BOSSS 
+
+
                                 if (hit.collider.tag == "Boss")
                                 {
                                     nView = hit.collider.GetComponent<NetworkView>();
@@ -386,6 +389,9 @@ public class LaserBeam : MonoBehaviour
                                         nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 5);
                                     }
                                 }
+
+
+
 
 
                                 if (laserAmmo == 0)

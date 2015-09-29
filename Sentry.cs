@@ -198,9 +198,16 @@ public class Sentry : MonoBehaviour {
 
     void OnGUI()
     {
-        GUI.skin = skin; 
-        
-        GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
+        GUI.skin = skin;
+
+        if (GetComponent<NetworkView>().isMine)
+        {
+            GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
+        }
+        else
+        {
+            GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
+        }
     }
     void BossHealth()
     {
@@ -292,6 +299,7 @@ public class Sentry : MonoBehaviour {
     public void ClientTakeDamageFromWeapon(int dam)
     {
         health = health - (dam / 2);
+        nView.RPC("SyncHealth", RPCMode.All, health); 
         CheckIfDead();
     }
     #region Network Junk
@@ -369,6 +377,11 @@ public class Sentry : MonoBehaviour {
     {
         health = health - (damage / 2);
         CheckIfDead(); 
+    }
+    [RPC]
+    void SyncHealth(float cHealth)
+    {
+        health = cHealth;
     }
     #region NetworkSyncing
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)

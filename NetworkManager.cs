@@ -44,7 +44,7 @@ public class NetworkManager : MonoBehaviour {
         StartCoroutine(RefreshRate()); 
         RefreshHostList();
         scroll = 0f; 
-        nView = GetComponent<NetworkView>(); 
+        nView = GetComponent<NetworkView>();
         
 	}
     bool showMainMenu = true; 
@@ -68,6 +68,7 @@ public class NetworkManager : MonoBehaviour {
             playerNames.Clear(); 
 
         }
+        
     }
 	void Update ()
     {
