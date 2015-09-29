@@ -21,7 +21,8 @@ public class Sentry : MonoBehaviour {
     NetworkView nView;
     NetworkView pView;
     public GameObject death;
-    bool alive; 
+    bool alive;
+    float serverHealth; 
     #region
 
     private float lastSynchronizationTime = 0f;
@@ -38,7 +39,7 @@ public class Sentry : MonoBehaviour {
 
     int weapon = 0;
     int ammoCount; 
-    float health;
+    public float health;
     public GUISkin skin;
 
     List<GameObject> movePositions = new List<GameObject>();
@@ -98,7 +99,7 @@ public class Sentry : MonoBehaviour {
 
         direction = (players[playerChoice].transform.position - transform.position).normalized;
         lookRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 5);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 2.5f);
 
         if (fire)
         {
@@ -199,14 +200,15 @@ public class Sentry : MonoBehaviour {
     void OnGUI()
     {
         GUI.skin = skin;
-
+        serverHealth = health;
+        GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
         if (GetComponent<NetworkView>().isMine)
         {
-            GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
+          //  GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
         }
         else
         {
-            GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
+           // GUI.Box(new Rect((Screen.width / 2) - ((serverHealth / 2) / 2), 0, (serverHealth / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
         }
     }
     void BossHealth()
@@ -299,7 +301,7 @@ public class Sentry : MonoBehaviour {
     public void ClientTakeDamageFromWeapon(int dam)
     {
         health = health - (dam / 2);
-        nView.RPC("SyncHealth", RPCMode.All, health); 
+        nView.RPC("SyncHealth", RPCMode.All , health); 
         CheckIfDead();
     }
     #region Network Junk
@@ -376,16 +378,21 @@ public class Sentry : MonoBehaviour {
     void NetworkTakeDamageFromWeapon(int damage)
     {
         health = health - (damage / 2);
+        nView.RPC("SyncHealth", RPCMode.All, health);
         CheckIfDead(); 
     }
     [RPC]
     void SyncHealth(float cHealth)
     {
         health = cHealth;
+        Sentry mSentry;
+        mSentry = GameObject.FindGameObjectWithTag("Boss");
+        mSentry.health = cHealth; 
     }
     #region NetworkSyncing
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
     {
+        serverHealth = health; 
         Vector3 syncPosition = Vector3.zero;
         Quaternion rot = Quaternion.identity;
 
@@ -394,17 +401,18 @@ public class Sentry : MonoBehaviour {
 
             syncPosition = transform.position;
             rot = transform.rotation;
-
+            serverHealth = health; 
 
             stream.Serialize(ref syncPosition);
 
             stream.Serialize(ref rot);
+            stream.Serialize(ref serverHealth);
         }
         else
         {
             stream.Serialize(ref syncPosition);
             stream.Serialize(ref rot);
-
+            stream.Serialize(ref serverHealth); 
             syncTime = 0f;
             syncDelay = Time.time - lastSynchronizationTime;
             lastSynchronizationTime = Time.time;
