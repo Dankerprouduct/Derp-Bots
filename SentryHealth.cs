@@ -34,14 +34,7 @@ public class SentryHealth : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        if (startPos == 1)
-        {
-            startPosition = GameObject.Find("SentryHealthPosition1").GetComponent<Transform>();
-        }
-        if (startPos == 2)
-        {
-            startPosition = GameObject.Find("SentryHealthPosition2").GetComponent<Transform>();
-        }
+        
         if (nView.isMine)
         {
             MainAi();
@@ -54,8 +47,17 @@ public class SentryHealth : MonoBehaviour {
 
     void MainAi()
     {
-        transform.position = Vector3.Lerp(transform.position, new Vector3(startPosition.position.x, transform.position.y, startPosition.position.z), 2 * Time.deltaTime);
-        transform.Rotate(Vector3.one * 3 * Time.deltaTime);
+        if (startPos == 1)
+        {
+            startPosition = GameObject.Find("SentryHealthPosition1").GetComponent<Transform>();
+        }
+        if (startPos == 2)
+        {
+            startPosition = GameObject.Find("SentryHealthPosition2").GetComponent<Transform>();
+        }
+        Vector3 startPosVector = new Vector3(startPosition.position.x, startPosition.position.y, startPosition.position.z);
+        transform.position = Vector3.Lerp(transform.position, startPosVector, 2 * Time.deltaTime);
+        //transform.Rotate(Vector3.one * 3 * Time.deltaTime);
 
 
     }

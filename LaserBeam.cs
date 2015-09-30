@@ -216,10 +216,7 @@ public class LaserBeam : MonoBehaviour
     }
     void DevOptions()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            incendaryAmmo++; 
-        }
+        
     }
 
     void DoStuff()

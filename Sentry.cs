@@ -112,7 +112,7 @@ public class Sentry : MonoBehaviour {
     {
         direction = (players[playerChoice].transform.position - transform.position).normalized;
         lookRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 2.5f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1f);
 
         if (fire)
         {
