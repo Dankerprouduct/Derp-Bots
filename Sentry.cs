@@ -386,7 +386,7 @@ public class Sentry : MonoBehaviour {
     {
         health = cHealth;
         Sentry mSentry;
-        mSentry = GameObject.FindGameObjectWithTag("Boss");
+        mSentry = GameObject.FindGameObjectWithTag("Boss").GetComponent<Sentry>();
         mSentry.health = cHealth; 
     }
     #region NetworkSyncing
