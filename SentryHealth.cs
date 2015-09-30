@@ -2,12 +2,19 @@
 using System.Collections;
 
 public class SentryHealth : MonoBehaviour {
-
+    [RequireComponent(typeof(LineRenderer))]
     NetworkView nView;
     float health;
     Transform bossPosition;
     Transform startPosition;
     public int startPos;
+
+    RaycastHit hit;
+    float range = 1000.0f;
+    LineRenderer line;
+    public Material lineMaterial;
+    Vector3 direction; 
+    bool alive; 
     #region
 
     private float lastSynchronizationTime = 0f;
@@ -24,10 +31,16 @@ public class SentryHealth : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        nView.GetComponent<NetworkView>();
+        alive = true; 
+        nView = GetComponent<NetworkView>();
         health = 500;
         bossPosition = GameObject.FindGameObjectWithTag("Boss").GetComponent<Transform>();
 
+        line = GetComponent<LineRenderer>();
+        line.SetVertexCount(2);
+        line.material = lineMaterial;
+        line.SetColors(Color.red, Color.red);
+        line.SetWidth(0.1f, .25f);
         
     }
 	
@@ -49,15 +62,33 @@ public class SentryHealth : MonoBehaviour {
     {
         if (startPos == 1)
         {
-            startPosition = GameObject.Find("SentryHealthPosition1").GetComponent<Transform>();
+            startPosition = GameObject.FindGameObjectWithTag("Health1").GetComponent<Transform>();
+            Vector3 startPosVector = new Vector3(startPosition.position.x, startPosition.position.y, startPosition.position.z);
+            transform.position = Vector3.Lerp(transform.position, startPosVector, .5f * Time.deltaTime);
         }
         if (startPos == 2)
         {
-            startPosition = GameObject.Find("SentryHealthPosition2").GetComponent<Transform>();
+            startPosition = GameObject.FindGameObjectWithTag("Health2").GetComponent<Transform>();
+            Vector3 startPosVector = new Vector3(startPosition.position.x, startPosition.position.y, startPosition.position.z);
+            transform.position = Vector3.Lerp(transform.position, startPosVector, .5f * Time.deltaTime);
         }
-        Vector3 startPosVector = new Vector3(startPosition.position.x, startPosition.position.y, startPosition.position.z);
-        transform.position = Vector3.Lerp(transform.position, startPosVector, 2 * Time.deltaTime);
+
+
+        
         //transform.Rotate(Vector3.one * 3 * Time.deltaTime);
+
+        if (alive)
+        {
+            
+            Ray ray = new Ray(transform.parent.GetComponent<Camera>().transform.position, transform.parent.GetComponent<Camera>().transform.forward);
+            Vector3 pos = transform.position; 
+            direction = (bossPosition.transform.position - transform.position).normalized;
+
+            line.enabled = true;
+
+            line.SetPosition(0, transform.position);
+            line.SetPosition(1, bossPosition.position);
+        }
 
 
     }
