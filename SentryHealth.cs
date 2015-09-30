@@ -28,19 +28,20 @@ public class SentryHealth : MonoBehaviour {
         health = 500;
         bossPosition = GameObject.FindGameObjectWithTag("Boss").GetComponent<Transform>();
 
+        
+    }
+	
+	// Update is called once per frame
+	void Update ()
+    {
         if (startPos == 1)
         {
             startPosition = GameObject.Find("SentryHealthPosition1").GetComponent<Transform>();
         }
         if (startPos == 2)
         {
-            startPosition = GameObject.Find("SentryHealthPosition2").GetComponent<Transform>(); 
+            startPosition = GameObject.Find("SentryHealthPosition2").GetComponent<Transform>();
         }
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
         if (nView.isMine)
         {
             MainAi();
