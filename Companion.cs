@@ -40,6 +40,10 @@ public class Companion : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        MainAi();
+    }
+    void MainAi()
+    {
         Transform target = players[playerIndex].transform;
 
         direction = (target.transform.position - transform.position).normalized;
