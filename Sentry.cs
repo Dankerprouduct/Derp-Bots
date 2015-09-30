@@ -232,7 +232,8 @@ public class Sentry : MonoBehaviour {
         }
         else
         {
-            Network.Instantiate(death, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0); 
+            Network.Instantiate(death, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0);
+            Network.Destroy(this.gameObject); 
         }
     }
     IEnumerator PlayerChoice()
