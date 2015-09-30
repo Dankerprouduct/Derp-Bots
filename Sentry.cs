@@ -22,7 +22,9 @@ public class Sentry : MonoBehaviour {
     NetworkView pView;
     public GameObject death;
     bool alive;
-    float serverHealth; 
+    float serverHealth;
+    public GameObject healthOrb1;
+    public GameObject healthOrb2; 
     #region
 
     private float lastSynchronizationTime = 0f;
@@ -86,8 +88,12 @@ public class Sentry : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        
-        
+
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            Network.Instantiate(healthOrb1, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0); 
+            Network.Instantiate(healthOrb2, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0);
+        }
 
         if (nView.isMine)
         {
