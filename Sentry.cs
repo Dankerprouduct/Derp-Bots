@@ -86,17 +86,24 @@ public class Sentry : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        BossHealth(); 
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            movePos++;
-        }
+        
+        
 
-        if (!nView.isMine)
+        if (nView.isMine)
+        {
+            BossHealth();
+            MainAI(); 
+        }
+        else
         {
             SyncedMovement(); 
         }
 
+        
+        
+    }
+    void MainAI()
+    {
         direction = (players[playerChoice].transform.position - transform.position).normalized;
         lookRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 2.5f);
@@ -108,7 +115,7 @@ public class Sentry : MonoBehaviour {
             Vector3 dir = transform.forward;
             if (Physics.Raycast(ray, out hit, range))
             {
-                if(weapon == 0)
+                if (weapon == 0)
                 {
                     line.enabled = true;
                     line.SetPosition(0, transform.position);
@@ -118,11 +125,11 @@ public class Sentry : MonoBehaviour {
                 }
                 else
                 {
-                    line.enabled = false; 
+                    line.enabled = false;
                 }
                 if (hit.collider.tag == "Player")
                 {
-                                        
+
                     switch (weapon)
                     {
                         case 0:
@@ -145,19 +152,19 @@ public class Sentry : MonoBehaviour {
                                 {
                                     pView.RPC("NetworkTakeDamageFromWeapon", pView.owner, 1);
                                 }
-                                
-                                break; 
-                            }
-                            
 
-                            
+                                break;
+                            }
+
+
+
 
                         case 1:
                             {
                                 if (ammoCount > 0)
                                 {
                                     Network.Instantiate(orb, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0);
-                                    ammoCount--; 
+                                    ammoCount--;
                                 }
                                 break;
                             }
@@ -192,9 +199,8 @@ public class Sentry : MonoBehaviour {
         }
         else
         {
-            line.enabled = false; 
+            line.enabled = false;
         }
-        
     }
 
     void OnGUI()
@@ -202,14 +208,7 @@ public class Sentry : MonoBehaviour {
         GUI.skin = skin;
         serverHealth = health;
         GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
-        if (GetComponent<NetworkView>().isMine)
-        {
-          //  GUI.Box(new Rect((Screen.width / 2) - ((health / 2) / 2), 0, (health / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
-        }
-        else
-        {
-           // GUI.Box(new Rect((Screen.width / 2) - ((serverHealth / 2) / 2), 0, (serverHealth / 2), 50), "Mad Crystal", skin.GetStyle("BossHealth"));
-        }
+        
     }
     void BossHealth()
     {
