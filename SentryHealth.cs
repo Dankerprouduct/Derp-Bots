@@ -81,7 +81,7 @@ public class SentryHealth : MonoBehaviour {
 
         if (alive)
         {
-            nView.RPC("Show", RPCMode.All, true); 
+            nView.RPC("Shot", RPCMode.All, true); 
             Ray ray = new Ray(transform.position, transform.forward);
             Vector3 pos = transform.position; 
             direction = (bossPosition.transform.position - transform.position).normalized;
