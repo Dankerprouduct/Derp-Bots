@@ -77,11 +77,11 @@ public class SentryHealth : MonoBehaviour {
 
 
         
-        transform.Rotate(Vector3.down * 3 * Time.deltaTime);
+        transform.Rotate(Vector3.down * 60 * Time.deltaTime);
 
         if (alive)
         {
-            
+            nView.RPC("Show", RPCMode.All, true); 
             Ray ray = new Ray(transform.position, transform.forward);
             Vector3 pos = transform.position; 
             direction = (bossPosition.transform.position - transform.position).normalized;
@@ -91,11 +91,18 @@ public class SentryHealth : MonoBehaviour {
             line.SetPosition(0, transform.position);
             line.SetPosition(1, bossPosition.position);
 
-            if (health >= 500)
+            if (health <= 0)
             {
-                health = 500; 
+                alive = false; 
             }
         }
+        else
+        {
+            nView.RPC("Show", RPCMode.All, false); 
+            line.enabled = false;
+            Network.Destroy(this.gameObject);
+        }
+        
 
 
     }
@@ -103,6 +110,20 @@ public class SentryHealth : MonoBehaviour {
     void NetworkTakeDamageFromWeapon(int damage)
     {
         health = health - damage; 
+    }
+    [RPC]
+    void Shot(bool show)
+    {
+        if (show)
+        {
+            line.enabled = true;
+            line.SetPosition(0, transform.position);
+            line.SetPosition(1, bossPosition.position);
+        }
+        else
+        {
+            line.enabled = false; 
+        }
     }
     #region NetworkSyncing
     void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)

@@ -40,7 +40,10 @@ public class Companion : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        MainAi(); 
+        if (nView.isMine)
+        {
+            MainAi();
+        }
     }
     void MainAi()
     {
@@ -71,14 +74,14 @@ public class Companion : MonoBehaviour {
                 pView.RPC("NetworkTakeDamageFromWeapon", pView.owner, 5);
             }
             Network.Instantiate(explosion, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0);
-            Destroy(this.gameObject); 
+            Network.Destroy(this.gameObject); 
         }
     }
     [RPC]
     void NetworkTakeDamageFromWeapon(int damage, NetworkMessageInfo info)
     {
         Network.Instantiate(explosion, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0);
-        Destroy(this.gameObject);
+        Network.Destroy(this.gameObject);
     }
     public void ClientTakeDamageFromWeapon()
     {

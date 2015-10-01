@@ -241,13 +241,15 @@ public class Sentry : MonoBehaviour {
         
         if (spawnedHealth)
         {
-            if (GameObject.Find("Sentry Health"))
+            if (GameObject.FindGameObjectWithTag("SentryHealth1"))
             {
                 health = health + .5f;
+                Debug.Log("Sentry One Found");
             }
-            if (GameObject.Find("Sentry Health 1"))
+            if (GameObject.FindGameObjectWithTag("SentryHealth2"))
             {
                 health = health + .5f;
+                Debug.Log("Sentry Two Found"); 
             }
         }
     }

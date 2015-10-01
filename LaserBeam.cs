@@ -374,7 +374,7 @@ public class LaserBeam : MonoBehaviour
                                 if (hit.collider.tag == "Boss")
                                 {
                                     nView = hit.collider.GetComponent<NetworkView>();
-                                    nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 5);
+                                   // nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 5);
                                     if (nView.isMine)
                                     {
                                         Sentry boss;

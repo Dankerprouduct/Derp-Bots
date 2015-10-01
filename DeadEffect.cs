@@ -37,14 +37,20 @@ public class DeadEffect : MonoBehaviour {
         randomDirection = new Vector3(Random.value, Random.value, Random.value);
         GetComponent<Rigidbody>().AddForce(randomDirection * 250);
 
-        Destroy(this.gameObject, 15); 
+        
+        
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 	
 	}
-
+    IEnumerator WaitToDespawn()
+    {
+        yield return new WaitForSeconds(15);
+        Network.Destroy(this.gameObject); 
+    }
     [RPC]
     void DeathColor(Vector3 color, NetworkMessageInfo info)
     {
