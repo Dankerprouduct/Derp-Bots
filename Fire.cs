@@ -30,7 +30,7 @@ public class Fire : MonoBehaviour {
         if (coll.tag == "Boss")
         {
             // GameObject hitPlayer = coll.gameObject;
-
+            nView = coll.GetComponent<NetworkView>(); 
             nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 1); 
 
             if (nView.isMine)

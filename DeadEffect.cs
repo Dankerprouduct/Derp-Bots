@@ -37,7 +37,7 @@ public class DeadEffect : MonoBehaviour {
         randomDirection = new Vector3(Random.value, Random.value, Random.value);
         GetComponent<Rigidbody>().AddForce(randomDirection * 250);
 
-        
+        StartCoroutine(WaitToDespawn()); 
         
 	}
 	

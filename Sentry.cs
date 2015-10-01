@@ -110,7 +110,8 @@ public class Sentry : MonoBehaviour {
     
     void MainAI()
     {
-        direction = (players[playerChoice].transform.position - transform.position).normalized;
+        
+        direction = ((players[playerChoice].transform.position - new Vector3(0,0,0))- transform.position).normalized;
         lookRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1f);
 
@@ -256,6 +257,10 @@ public class Sentry : MonoBehaviour {
                 health = health + .5f;
                 Debug.Log("Sentry Two Found");
             }
+            if (health >= 1000)
+            {
+                health = 1000; 
+            }
         }
         else
         {
@@ -269,6 +274,10 @@ public class Sentry : MonoBehaviour {
             {
                 health = health + .5f;
                 Debug.Log("Sentry Two Found");
+            }
+            if (health >= 1000)
+            {
+                health = 1000;
             }
         }
 
