@@ -104,7 +104,7 @@ public class Sentry : MonoBehaviour {
             SyncedMovement(); 
         }
 
-        
+        HealthRespawn(); 
         
     }
     
@@ -239,20 +239,39 @@ public class Sentry : MonoBehaviour {
                 spawnedHealth = true; 
             }
         }
-        
-        if (spawnedHealth)
+                
+    }
+    void HealthRespawn()
+    {
+        if (nView.isMine)
         {
             if (GameObject.FindGameObjectWithTag("SentryHealth1"))
             {
+
                 health = health + .5f;
                 Debug.Log("Sentry One Found");
             }
             if (GameObject.FindGameObjectWithTag("SentryHealth2"))
             {
                 health = health + .5f;
-                Debug.Log("Sentry Two Found"); 
+                Debug.Log("Sentry Two Found");
             }
         }
+        else
+        {
+            if (GameObject.FindGameObjectWithTag("SentryHealth1"))
+            {
+
+                health = health + .5f;
+                Debug.Log("Sentry One Found");
+            }
+            if (GameObject.FindGameObjectWithTag("SentryHealth2"))
+            {
+                health = health + .5f;
+                Debug.Log("Sentry Two Found");
+            }
+        }
+
     }
     void CheckIfDead()
     {
