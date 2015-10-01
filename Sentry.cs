@@ -107,6 +107,7 @@ public class Sentry : MonoBehaviour {
         
         
     }
+    
     void MainAI()
     {
         direction = (players[playerChoice].transform.position - transform.position).normalized;

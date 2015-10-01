@@ -216,7 +216,10 @@ public class LaserBeam : MonoBehaviour
     }
     void DevOptions()
     {
-        
+        if (Input.GetKey(KeyCode.M))
+        {
+            laserAmmo = 100; 
+        }   
     }
 
     void DoStuff()

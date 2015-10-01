@@ -31,7 +31,7 @@ public class Fire : MonoBehaviour {
         {
             // GameObject hitPlayer = coll.gameObject;
 
-            
+            nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 1); 
 
             if (nView.isMine)
             {
