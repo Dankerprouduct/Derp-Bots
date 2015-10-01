@@ -106,6 +106,10 @@ public class SentryHealth : MonoBehaviour {
 
 
     }
+    public void ClientTakeDamageFromWeapon(int damage)
+    {
+        health = health - damage; 
+    }
     [RPC]
     void NetworkTakeDamageFromWeapon(int damage)
     {

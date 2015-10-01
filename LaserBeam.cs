@@ -387,8 +387,33 @@ public class LaserBeam : MonoBehaviour
                                     }
                                 }
 
+                                if (hit.collider.tag == "SentryHealth1")
+                                {
+                                    nView = hit.collider.GetComponent<NetworkView>();
+                                    if (nView.isMine)
+                                    {
+                                        SentryHealth sentryHealth;
+                                        sentryHealth = nView.GetComponent<SentryHealth>();
+                                        sentryHealth.ClientTakeDamageFromWeapon(5);
+                                        
+                                    }
+                                    else
+                                    {
+                                        nView.RPC("NetworkTakeDamageFromWeapon", nView.owner, 5);
+                                    }
 
+                                }
+                                if (hit.collider.tag == "SentryHealth2")
+                                {
+                                    nView = hit.collider.GetComponent<NetworkView>();
+                                    if (nView.isMine)
+                                    {
+                                        SentryHealth sentryHealth;
+                                        sentryHealth = nView.GetComponent<SentryHealth>();
+                                        sentryHealth.ClientTakeDamageFromWeapon(5); 
+                                    }
 
+                                }
 
 
                                 if (laserAmmo == 0)
