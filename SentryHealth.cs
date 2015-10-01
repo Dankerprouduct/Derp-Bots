@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(LineRenderer))]
+
 public class SentryHealth : MonoBehaviour {
-    [RequireComponent(typeof(LineRenderer))]
+    
     NetworkView nView;
     float health;
     Transform bossPosition;
@@ -39,8 +41,8 @@ public class SentryHealth : MonoBehaviour {
         line = GetComponent<LineRenderer>();
         line.SetVertexCount(2);
         line.material = lineMaterial;
-        line.SetColors(Color.red, Color.red);
-        line.SetWidth(0.1f, .25f);
+        line.SetColors(Color.green, Color.green);
+        line.SetWidth(1f, .1f);
         
     }
 	
@@ -75,12 +77,12 @@ public class SentryHealth : MonoBehaviour {
 
 
         
-        //transform.Rotate(Vector3.one * 3 * Time.deltaTime);
+        transform.Rotate(Vector3.down * 3 * Time.deltaTime);
 
         if (alive)
         {
             
-            Ray ray = new Ray(transform.parent.GetComponent<Camera>().transform.position, transform.parent.GetComponent<Camera>().transform.forward);
+            Ray ray = new Ray(transform.position, transform.forward);
             Vector3 pos = transform.position; 
             direction = (bossPosition.transform.position - transform.position).normalized;
 
@@ -88,6 +90,11 @@ public class SentryHealth : MonoBehaviour {
 
             line.SetPosition(0, transform.position);
             line.SetPosition(1, bossPosition.position);
+
+            if (health >= 500)
+            {
+                health = 500; 
+            }
         }
 
 

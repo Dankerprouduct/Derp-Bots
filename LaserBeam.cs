@@ -379,7 +379,7 @@ public class LaserBeam : MonoBehaviour
                                     {
                                         Sentry boss;
                                         boss = nView.GetComponent<Sentry>();
-                                        boss.ClientTakeDamageFromWeapon(10);
+                                        boss.ClientTakeDamageFromWeapon(5);
                                     }
                                     else
                                     {

@@ -47,6 +47,8 @@ public class Sentry : MonoBehaviour {
     List<GameObject> movePositions = new List<GameObject>();
     int movePos = 0;
     Vector3 currentMovePosition;
+
+    bool spawnedHealth; 
     // Use this for initialization
     void Awake()
     {
@@ -66,6 +68,8 @@ public class Sentry : MonoBehaviour {
         currentMovePosition = new Vector3(movePositions[movePos].transform.position.x, movePositions[movePos].transform.position.y, movePositions[movePos].transform.position.z);
 
         transform.position = currentMovePosition;
+
+        spawnedHealth = false; 
 
         alive = true; 
         health = 1000f; 
@@ -88,12 +92,7 @@ public class Sentry : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Network.Instantiate(healthOrb1, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0); 
-            Network.Instantiate(healthOrb2, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0);
-        }
+               
 
         if (nView.isMine)
         {
@@ -228,6 +227,28 @@ public class Sentry : MonoBehaviour {
             alive = true;
             currentMovePosition = new Vector3(movePositions[movePos].transform.position.x, movePositions[movePos].transform.position.y, movePositions[movePos].transform.position.z);
             transform.position = Vector3.Lerp(transform.position, currentMovePosition, 1 * Time.deltaTime);
+        }
+        
+        if (health <= 250)
+        {
+            if (!spawnedHealth)
+            {
+                Network.Instantiate(healthOrb1, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0);
+                Network.Instantiate(healthOrb2, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0);
+                spawnedHealth = true; 
+            }
+        }
+        
+        if (spawnedHealth)
+        {
+            if (GameObject.Find("Sentry Health"))
+            {
+                health = health + .5f;
+            }
+            if (GameObject.Find("Sentry Health 1"))
+            {
+                health = health + .5f;
+            }
         }
     }
     void CheckIfDead()
