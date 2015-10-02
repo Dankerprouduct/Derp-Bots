@@ -113,7 +113,7 @@ public class Sentry : MonoBehaviour {
         
         direction = ((players[playerChoice].transform.position - new Vector3(0,0,0))- transform.position).normalized;
         lookRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, 1f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, (1f * Time.deltaTime));
 
         if (fire)
         {
@@ -219,18 +219,22 @@ public class Sentry : MonoBehaviour {
     }
     void BossHealth()
     {
-        if (health <= 0)
+        // calls move to posiiton
+        if (health >= 0)
         {
-            alive = false; 
-            // Do an awesome explosion
+            alive = true;
+            if (health >= 250)
+            {
+                //MoveToPosition(0); 
+            }
+            MoveToPosition(movePos);
         }
         else
         {
-            alive = true;
-            currentMovePosition = new Vector3(movePositions[movePos].transform.position.x, movePositions[movePos].transform.position.y, movePositions[movePos].transform.position.z);
-            transform.position = Vector3.Lerp(transform.position, currentMovePosition, 1 * Time.deltaTime);
+            alive = false; 
         }
-        
+
+        // spawn health orbs if health is lower than 250
         if (health <= 250)
         {
             if (!spawnedHealth)
@@ -242,6 +246,7 @@ public class Sentry : MonoBehaviour {
         }
                 
     }
+    // Health Orbs
     void HealthRespawn()
     {
         if (nView.isMine)
@@ -284,15 +289,21 @@ public class Sentry : MonoBehaviour {
     }
     void CheckIfDead()
     {
-        if (alive)
-        {
-
-        }
-        else
+        if(!alive)
         {
             Network.Instantiate(death, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity, 0);
             Network.Destroy(this.gameObject); 
         }
+    }
+    void PreliminaryMovement(int place)
+    {
+
+    }
+    void MoveToPosition(int pos)
+    {
+        
+        currentMovePosition = new Vector3(movePositions[pos].transform.position.x, movePositions[pos].transform.position.y, movePositions[pos].transform.position.z);
+        transform.position = Vector3.Lerp(transform.position, currentMovePosition, 1 * Time.deltaTime);
     }
     IEnumerator PlayerChoice()
     {
