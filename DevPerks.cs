@@ -20,10 +20,12 @@ public class DevPerks : MonoBehaviour {
     private float rotationSpeed;
     Vector3 direction;
     NetworkManager nManager;
-    NetworkView nView; 
+    NetworkView nView;
+    Material mat; 
     // Use this for initialization
     void Start ()
     {
+        mat = GetComponent<Material>(); 
         nView = GetComponent<NetworkView>(); 
         nManager = GameObject.FindGameObjectWithTag("GM/NM").GetComponent<NetworkManager>();
         if (nView.isMine)
@@ -58,6 +60,29 @@ public class DevPerks : MonoBehaviour {
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 3);
 
         transform.Translate(Vector3.forward * 20 * Time.deltaTime);
+        
+        ColorChange(); 
+        
+    }
+    void ColorChange()
+    {
+        Color color = new Color();
+        color.r += (1 * Time.deltaTime);
+        color.g += (1.5f * Time.deltaTime);
+        color.r += (2 * Time.deltaTime);
+        if (color.r >= 255)
+        {
+            color.r = 0;
+        }
+        if (color.g >= 255)
+        {
+            color.g = 255;
+        }
+        if (color.b >= 255)
+        {
+            color.b = 255;
+        }
+        mat.color = color; 
     }
     [RPC]
     void ShowDev(bool show, NetworkMessageInfo info)

@@ -227,6 +227,7 @@ public class Sentry : MonoBehaviour {
             {
                 //MoveToPosition(0); 
             }
+
             MoveToPosition(movePos);
         }
         else
