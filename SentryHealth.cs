@@ -53,11 +53,14 @@ public class SentryHealth : MonoBehaviour {
         if (nView.isMine)
         {
             MainAi();
+            
         }
         else
         {
-            SyncedMovement(); 
+            SyncedMovement();
+            
         }
+        SentryHealthCheck(); 
 	}
 
     void MainAi()
@@ -77,7 +80,7 @@ public class SentryHealth : MonoBehaviour {
 
 
         
-        transform.Rotate(Vector3.down * 60 * Time.deltaTime);
+        transform.Rotate(Vector3.down * 120 * Time.deltaTime);
 
         if (alive)
         {
@@ -105,6 +108,25 @@ public class SentryHealth : MonoBehaviour {
         
 
 
+    }
+    void SentryHealthCheck()
+    {
+        if (nView.isMine)
+        {
+           // health = this.health; 
+            if (!alive)
+            {
+                Network.Destroy(this.gameObject);
+            }
+        }
+        else
+        {
+         //   health = this.health;
+            if (!alive)
+            {
+                Network.Destroy(this.gameObject);
+            }
+        }
     }
     public void ClientTakeDamageFromWeapon(int damage)
     {
