@@ -3,13 +3,14 @@ using System.Collections;
 
 public class LaserParticle : MonoBehaviour {
 
-    ParticleSystem particleSystem;
+    public ParticleSystem particle;
 	// Use this for initialization
 	void Start () 
     {
-        particleSystem = GetComponent<ParticleSystem>();
-        
-        Destroy(this.gameObject, GetComponent<ParticleSystem>().duration); 
+       // particleSystem = GetComponent<ParticleSystem>();
+
+        particle = GetComponent<ParticleSystem>();
+        Destroy(this.gameObject, particle.duration); 
 	}
 	
 	// Update is called once per frame

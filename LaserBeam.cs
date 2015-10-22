@@ -734,6 +734,8 @@ public class LaserBeam : MonoBehaviour
     {
         Instantiate(FlashBang, pos, Quaternion.Euler(270f, 2.350006f, 0f));
     }
+    
+    
     [RPC]
     void Shot(Vector3 position, Vector3 direction, bool show, NetworkMessageInfo info)
     {
@@ -798,4 +800,5 @@ public class LaserBeam : MonoBehaviour
 
     }
 
+    
 }

@@ -29,7 +29,8 @@ public class NetworkManager : MonoBehaviour {
     private const string gameName = "Derp Bots";
     public GameObject playerPrefab;
     public GameObject spawnPoint;
-    public GameObject sentry; 
+    public GameObject sentry;
+    public GameObject xenu; 
     int mapNum = 0; 
     int serverPort;
 
@@ -290,10 +291,15 @@ public class NetworkManager : MonoBehaviour {
                 {
                     mapNum = 15;
                 }
+                if (GUI.Button(new Rect(400, 750 + scroll, 800, 50), "Xenu: The Galatic Pigeon"))
+                {
+                    mapNum = 16; 
+                }
                 if (Input.GetKeyDown(KeyCode.T))
                 {
                     mapNum = 9;
                 }
+
                 if (!showStartGame)
                 {
                     if (GUI.Button(new Rect(50, 50, 250, 100), "StartServer"))
@@ -303,6 +309,7 @@ public class NetworkManager : MonoBehaviour {
                         {
                             showStartGame = true;
                             StartServer();
+                            
                         }
                     }
                 }
@@ -406,6 +413,10 @@ public class NetworkManager : MonoBehaviour {
         if (Application.loadedLevel == 15)
         {
             Network.Instantiate(sentry, new Vector3(0, 20, 0), Quaternion.identity, 0);
+        }
+        if (Application.loadedLevel == 16)
+        {
+            Network.Instantiate(xenu, new Vector3(0, 0, 0), Quaternion.identity, 0); 
         }
 
     }
