@@ -3,7 +3,8 @@ using System.Collections;
 
 public class XenuBomb : MonoBehaviour {
 
-	// Use this for initialization
+    // Use this for initialization
+    public GameObject explosion;
 	void Start () 
     {
         Destroy(this.gameObject, GetComponent<ParticleSystem>().duration); 
@@ -17,6 +18,11 @@ public class XenuBomb : MonoBehaviour {
 	}
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Explosion Boom" + other.name); 
+        if (other.tag == "Floor")
+        {
+            Debug.Log("Explosion Boom " + other.name);
+            Network.Instantiate(explosion, transform.position, Quaternion.identity, 0); 
+            Destroy(this.gameObject);
+        }
     }
 }
